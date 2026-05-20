@@ -3,6 +3,7 @@ import { Download } from 'lucide-react'
 import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 const CaseStudyModalLazy = lazy(() => import('../components/CaseStudyModal.jsx'))
 import Modal from '../components/Modal.jsx'
+const ResumePreviewLazy = lazy(() => import('../components/ResumePreview.jsx'))
 import PageTransition from '../components/PageTransition.jsx'
 import { MODES, useMode } from '../context/ModeContext.jsx'
 const AboutLazy = lazy(() => import('../sections/About.jsx'))
@@ -140,18 +141,28 @@ export default function Professional() {
         </div>
       </Modal>
 
-      <Modal open={resumeOpen} onClose={() => setResumeOpen(false)} title="Resume preview" maxWidthClass="max-w-4xl">
-        <div className="h-[75vh] w-full overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-white/10 dark:bg-white/5">
-          <iframe className="h-full w-full" src={data.resumePreviewUrl} title="Resume preview" />
-        </div>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      <Modal
+        open={resumeOpen}
+        onClose={() => setResumeOpen(false)}
+        title="Resume preview"
+        maxWidthClass="max-w-4xl"
+        embedFriendly
+      >
+        {resumeOpen ? (
+          <Suspense
+            fallback={
+              <div className="flex h-[75vh] min-h-[420px] items-center justify-center rounded-xl border border-zinc-200 bg-zinc-100 text-zinc-600 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
+                Loading resume…
+              </div>
+            }
+          >
+            <ResumePreviewLazy src={data.resumePreviewUrl} downloadUrl={data.resumeUrl} className="h-[75vh]" />
+          </Suspense>
+        ) : null}
+        <div className="mt-4">
           <a className="btn-primary" href={data.resumeUrl} download>
             <Download className="h-4 w-4" /> Download
           </a>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Tip: put the PDF in <code className="font-mono">public/</code> and set <code className="font-mono">resumeUrl</code> to{' '}
-            <code className="font-mono">/yourfile.pdf</code> (site root, not <code className="font-mono">public/...</code>).
-          </div>
         </div>
       </Modal>
     </PageTransition>
