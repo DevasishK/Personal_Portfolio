@@ -55,8 +55,13 @@ Update sample content here:
 - `src/utils/sampleData.js`
 
 If you want a real resume download:
-- Put your file at `public/resume.pdf`
-- Update `resumeUrl` in `src/utils/sampleData.js` if needed
+- Put your file in `public/` (e.g. `public/resume.pdf`)
+- Set `resumeUrl` / `resumePreviewUrl` in `src/utils/sampleData.js` to `/resume.pdf` (site root path, not `public/...`)
+
+**Resume preview blank or “Invalid Root reference”?** The PDF file is likely corrupted (broken xref/trailer). Fix it on your Mac:
+1. Open the PDF in **Preview**
+2. **File → Export as PDF** (or Print → Save as PDF)
+3. Replace the file in `public/` and redeploy
 
 ### Deploy (Vercel / Netlify)
 

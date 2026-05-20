@@ -3,7 +3,7 @@ import { Download } from 'lucide-react'
 import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
 const CaseStudyModalLazy = lazy(() => import('../components/CaseStudyModal.jsx'))
 import Modal from '../components/Modal.jsx'
-const ResumePreviewLazy = lazy(() => import('../components/ResumePreview.jsx'))
+import ResumePreview from '../components/ResumePreview.jsx'
 import PageTransition from '../components/PageTransition.jsx'
 import { MODES, useMode } from '../context/ModeContext.jsx'
 const AboutLazy = lazy(() => import('../sections/About.jsx'))
@@ -149,15 +149,7 @@ export default function Professional() {
         embedFriendly
       >
         {resumeOpen ? (
-          <Suspense
-            fallback={
-              <div className="flex h-[75vh] min-h-[420px] items-center justify-center rounded-xl border border-zinc-200 bg-zinc-100 text-zinc-600 dark:border-white/10 dark:bg-zinc-900 dark:text-zinc-300">
-                Loading resume…
-              </div>
-            }
-          >
-            <ResumePreviewLazy src={data.resumePreviewUrl} downloadUrl={data.resumeUrl} className="h-[75vh]" />
-          </Suspense>
+          <ResumePreview src={data.resumePreviewUrl} downloadUrl={data.resumeUrl} className="h-[75vh]" />
         ) : null}
         <div className="mt-4">
           <a className="btn-primary" href={data.resumeUrl} download>
