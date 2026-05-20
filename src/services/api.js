@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { isSupabaseConfigured, supabase } from './supabaseClient.js'
 
+/** Suppresses a second `increment_visit_count` RPC when React Strict Mode re-runs effects in dev (full reload resets this). */
+let visitIncrementDedupeUntil = 0
+
 function readJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key)
@@ -18,25 +21,33 @@ function writeJson(key, value) {
   }
 }
 
+function normalizeCount(value) {
+  if (value == null) return null
+  if (typeof value === 'bigint') return Number(value)
+  const n = Number(value)
+  return Number.isFinite(n) ? n : null
+}
+
 export async function incrementVisitCount() {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase.rpc('increment_visit_count')
-    if (error) throw error
-    return data
+  if (!isSupabaseConfigured || !supabase) return null
+
+  const now = Date.now()
+  if (now < visitIncrementDedupeUntil) {
+    return getVisitCount()
   }
-  const current = readJson('mock_visit_count', 0)
-  const next = current + 1
-  writeJson('mock_visit_count', next)
-  return next
+
+  const { data, error } = await supabase.rpc('increment_visit_count')
+  if (error) throw error
+  visitIncrementDedupeUntil = Date.now() + 1200
+  return normalizeCount(data)
 }
 
 export async function getVisitCount() {
-  if (isSupabaseConfigured) {
-    const { data, error } = await supabase.from('visits').select('count').single()
-    if (error) throw error
-    return data.count
-  }
-  return readJson('mock_visit_count', 0)
+  if (!isSupabaseConfigured || !supabase) return null
+
+  const { data, error } = await supabase.from('visits').select('count').single()
+  if (error) throw error
+  return normalizeCount(data?.count)
 }
 
 export async function submitQuestion(payload) {
@@ -118,6 +129,8 @@ export function useVisitorCount({ autoIncrement = true } = {}) {
       try {
         const next = autoIncrement ? await incrementVisitCount() : await getVisitCount()
         if (!cancelled) setCount(next)
+      } catch {
+        if (!cancelled) setCount(null)
       } finally {
         if (!cancelled) setLoading(false)
       }

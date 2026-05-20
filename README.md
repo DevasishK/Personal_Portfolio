@@ -32,7 +32,7 @@ npm run preview
 
 ### Configure Supabase
 
-This project works **without** Supabase (it falls back to local mock storage), but becomes “full-stack” when you add env vars + run the schema.
+This project works **without** Supabase for some features (questions + message wall fall back to local mock storage in the browser). The **visitor counter only uses Supabase** — without `VITE_SUPABASE_*` env vars it shows “— visits”. Add env vars + run the schema for a live global counter.
 
 1) Create a Supabase project
 2) In Supabase SQL editor, run:
