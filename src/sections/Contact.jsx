@@ -43,8 +43,9 @@ export default function Contact({ variant = 'professional' }) {
   }
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- reset chat when switching contact variant */
     resetChat()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [variant])
 
   useEffect(() => {
@@ -78,7 +79,6 @@ export default function Contact({ variant = 'professional' }) {
       }
 
       if (variant === 'professional' && isEmailConfigured()) {
-        // Reuse EmailJS transport with a contact-style payload.
         await sendRelationshipRequest({
           name: payload.name,
           type: 'status_change',
@@ -174,7 +174,7 @@ export default function Contact({ variant = 'professional' }) {
                 Let’s talk
               </h2>
               <p className="mt-3 text-base text-zinc-600 dark:text-zinc-300 md:text-lg">
-                Send a message. In Professional mode this goes to EmailJS (when configured); otherwise it’s stored in Supabase.
+                Send a message through the chat below — I read everything that comes through.
               </p>
 
               <div className="mt-6 flex flex-col gap-3">
@@ -229,14 +229,15 @@ export default function Contact({ variant = 'professional' }) {
             <div className="w-full">
               <div
                 className={clsx(
-                  'relative overflow-hidden rounded-3xl border border-white/10 p-6 dark:border-white/10',
-                  liteEffects ? 'bg-white/12 dark:bg-white/6' : 'bg-white/10 backdrop-blur-md dark:bg-white/5',
+                  'relative overflow-hidden rounded-3xl border p-6 shadow-sm',
+                  'border-zinc-200 bg-white dark:border-white/10 dark:shadow-none',
+                  liteEffects ? 'dark:bg-white/6' : 'backdrop-blur-md dark:bg-white/5',
                 )}
               >
                 <div
                   className={clsx(
-                    'pointer-events-none absolute -inset-8 rounded-[32px] bg-gradient-to-br from-orange-400/18 via-pink-400/14 to-purple-400/14',
-                    liteEffects ? 'opacity-40 blur-2xl' : 'blur-3xl',
+                    'pointer-events-none absolute -inset-8 rounded-[32px] bg-gradient-to-br from-orange-400/18 via-pink-400/14 to-purple-400/14 dark:from-orange-400/18 dark:via-pink-400/14 dark:to-purple-400/14',
+                    liteEffects ? 'opacity-25 blur-2xl dark:opacity-40' : 'opacity-20 blur-3xl dark:opacity-100',
                   )}
                   aria-hidden="true"
                 />
@@ -261,8 +262,8 @@ export default function Contact({ variant = 'professional' }) {
                             className={clsx(
                               'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed',
                               isUser
-                                ? 'bg-gradient-to-r from-orange-400/25 via-pink-400/20 to-purple-400/20 text-white'
-                                : 'border border-white/10 bg-white/10 text-white/90',
+                                ? 'bg-gradient-to-r from-orange-100 via-pink-100 to-purple-100 text-zinc-900 dark:from-orange-400/25 dark:via-pink-400/20 dark:to-purple-400/20 dark:text-white'
+                                : 'border border-zinc-200 bg-zinc-50 text-zinc-900 dark:border-white/10 dark:bg-white/10 dark:text-white/90',
                             )}
                           >
                             {m.text}
@@ -273,7 +274,7 @@ export default function Contact({ variant = 'professional' }) {
 
                     {typing ? (
                       <div className="flex justify-start">
-                        <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-white/70">
+                        <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 dark:border-white/10 dark:bg-white/10 dark:text-white/70">
                           typing…
                         </div>
                       </div>
@@ -287,7 +288,7 @@ export default function Contact({ variant = 'professional' }) {
                         <button
                           key={a.id}
                           type="button"
-                          className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 transition-all duration-200 hover:bg-white/10"
+                          className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-800 transition-all duration-200 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-white/80 dark:hover:bg-white/10"
                           onClick={() => {
                             // Jump to message step with a prefill
                             setMessages((prev) => [
@@ -316,7 +317,7 @@ export default function Contact({ variant = 'professional' }) {
                     }}
                   >
                     <input
-                      className="h-12 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white outline-none transition-all duration-200 placeholder:text-white/50 focus:border-white/20 focus:bg-white/10 focus:ring-2 focus:ring-orange-400/30"
+                      className="h-12 w-full rounded-xl border border-zinc-300 bg-white px-4 text-sm text-zinc-900 outline-none transition-all duration-200 placeholder:text-zinc-500 focus:border-zinc-400 focus:ring-2 focus:ring-orange-400/35 dark:border-white/10 dark:bg-white/5 dark:text-white dark:placeholder:text-white/50 dark:focus:border-white/20 dark:focus:bg-white/10 dark:focus:ring-orange-400/30"
                       placeholder={
                         step === 1
                           ? 'Your name…'
@@ -345,8 +346,8 @@ export default function Contact({ variant = 'professional' }) {
                     <div
                       className={
                         status.type === 'ok'
-                          ? 'mt-3 text-sm text-emerald-300'
-                          : 'mt-3 text-sm text-red-300'
+                          ? 'mt-3 text-sm text-emerald-700 dark:text-emerald-300'
+                          : 'mt-3 text-sm text-red-600 dark:text-red-300'
                       }
                     >
                       {status.msg}
@@ -355,7 +356,7 @@ export default function Contact({ variant = 'professional' }) {
 
                   {sentOnce ? (
                     <motion.div
-                      className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-sm text-emerald-200"
+                      className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-50 p-3 text-sm text-emerald-900 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-200"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                     >

@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo } from 'react'
+/* eslint-disable react-refresh/only-export-components -- MODES + useMode live alongside ModeProvider */
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
 
 export const MODES = /** @type {const} */ ({

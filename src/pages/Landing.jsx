@@ -48,7 +48,7 @@ function SideContent({ side, onCta }) {
         {content.label}
       </motion.div>
 
-      <motion.h1
+      <motion.h2
         className={[
           'mt-4 text-balance heading-hero text-readable-shadow',
           'text-zinc-900 dark:text-white',
@@ -56,7 +56,7 @@ function SideContent({ side, onCta }) {
         variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.35, delay: 0.1 } } }}
       >
         {content.heading}
-      </motion.h1>
+      </motion.h2>
 
       <motion.p
         className={[
@@ -127,8 +127,10 @@ export default function Landing() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen w-full flex overflow-hidden">
-        <div className="flex min-h-screen w-full flex-col overflow-hidden md:flex-row">
+      <>
+        <h1 className="sr-only">Devasish Viswanadh Kolla — portfolio</h1>
+        <div className="min-h-screen w-full flex overflow-hidden">
+          <div className="flex min-h-screen w-full flex-col overflow-hidden md:flex-row">
           {/* Professional (left) */}
           <motion.section
             className="relative flex h-[50vh] w-full cursor-pointer select-none overflow-hidden bg-[#F7F7FB] transition-all duration-300 ease-in-out dark:bg-[#1E1E24] md:h-auto md:w-1/2"
@@ -217,6 +219,7 @@ export default function Landing() {
           </motion.section>
         </div>
       </div>
+      </>
     </PageTransition>
   )
 }

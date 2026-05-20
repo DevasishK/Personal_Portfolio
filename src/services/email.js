@@ -15,10 +15,9 @@ export function isEmailConfigured() {
 export async function sendRelationshipRequest(payload) {
   const { serviceId, templateId, publicKey } = getEmailJsConfig()
   if (!serviceId || !templateId || !publicKey) {
-    throw new Error('Email is not configured. Set EmailJS env vars and try again.')
+    throw new Error('Email could not be sent from this site right now.')
   }
 
-  // EmailJS template variables should match these keys.
   const templateParams = {
     name: payload.name,
     type: payload.type,
@@ -32,12 +31,10 @@ export async function sendRelationshipRequest(payload) {
     await emailjs.send(serviceId, templateId, templateParams, { publicKey })
     return true
   } catch (err) {
-    // EmailJS errors usually include status + text; surface them for debugging.
     const status = err?.status
     const text = err?.text || err?.message || 'Unknown error'
-    // eslint-disable-next-line no-console
     console.error('EmailJS send failed:', err)
-    throw new Error(status ? `EmailJS failed (${status}): ${text}` : `EmailJS failed: ${text}`)
+    throw new Error(status ? `EmailJS failed (${status}): ${text}` : `EmailJS failed: ${text}`, { cause: err })
   }
 }
 

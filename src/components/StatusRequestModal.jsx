@@ -1,11 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { isEmailConfigured, sendRelationshipRequest } from '../services/email.js'
 import FloatingEmojiBurst from './FloatingEmojiBurst.jsx'
-import { STATUSES } from './RelationshipStatusDisplay.jsx'
-
 const MAX_CHARS = 120
 const AUTO_CLOSE_MS = 2600
 
@@ -133,6 +131,7 @@ export default function StatusRequestModal({ open, onClose, currentStatus }) {
 
   useEffect(() => {
     if (!open) return
+    /* eslint-disable react-hooks/set-state-in-effect -- reset wizard when modal opens */
     setError(null)
     setLoading(false)
     setBurst(false)
@@ -142,6 +141,7 @@ export default function StatusRequestModal({ open, onClose, currentStatus }) {
     setDate('')
     setText('')
     setSuccessMsg('')
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [open])
 
   useEffect(() => {
@@ -233,8 +233,7 @@ export default function StatusRequestModal({ open, onClose, currentStatus }) {
 
               {!configured ? (
                 <div className="mt-5 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 dark:border-white/10 dark:bg-white/5 dark:text-white/80">
-                  Email sending is not configured yet. Add EmailJS keys in your <code className="text-gray-900 dark:text-white">.env</code> and
-                  restart dev server.
+                  This form can’t send email from this site yet.
                 </div>
               ) : null}
 

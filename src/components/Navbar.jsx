@@ -80,7 +80,6 @@ export default function Navbar() {
             <ModeToggle />
           </div>
 
-          {/* Right: visits + theme + hamburger */}
           <div className="flex items-center justify-end gap-2">
             <div className="hidden sm:block">
               <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950/30 dark:text-zinc-200">

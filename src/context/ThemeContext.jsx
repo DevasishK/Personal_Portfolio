@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo } from 'react'
+/* eslint-disable react-refresh/only-export-components -- useTheme exported with ThemeProvider */
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
 
 function getSystemTheme() {

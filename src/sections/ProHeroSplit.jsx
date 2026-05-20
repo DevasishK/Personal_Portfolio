@@ -44,14 +44,10 @@ function IconLeetCode(props) {
   )
 }
 
-export default function ProHeroSplit({ onPlayVideo, onPreviewResume }) {
+export default function ProHeroSplit({ onPreviewResume }) {
   const [imgOk, setImgOk] = useState(true)
 
-  const imageUrl = useMemo(() => {
-    // Prefer profile-provided URL when available, otherwise default to /profile.jpg
-    // (safe fallback: if it 404s, we render a neutral block instead)
-    return profile?.hero?.profileImageUrl || '/profile.jpg'
-  }, [])
+  const imageUrl = useMemo(() => profile?.hero?.profileImageUrl || '/profile.jpg', [])
 
   return (
     <section className="w-full bg-white py-20 dark:bg-[#020617]">
@@ -153,6 +149,10 @@ export default function ProHeroSplit({ onPlayVideo, onPreviewResume }) {
                 <img
                   src={imageUrl}
                   alt="Devasish Viswanadh Kolla"
+                  width={288}
+                  height={288}
+                  fetchPriority="high"
+                  decoding="async"
                   className="h-72 w-72 rounded-2xl object-cover shadow-inner"
                   onError={() => setImgOk(false)}
                 />

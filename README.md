@@ -8,6 +8,12 @@ Dual-mode personal site by **Devasish Viswanadh Kolla** — [Repository on GitHu
 - **Fun mode** (`/fun`): interactive hero (thought trails + mind cloud), gallery, music vibe, and playful sections
 - **Landing** (`/`): choose mode
 
+### SEO & indexing
+
+- Canonical host: **`https://www.devasishkolla.in`** (see [`src/seo.ts`](src/seo.ts), [`public/sitemap.xml`](public/sitemap.xml), [`public/robots.txt`](public/robots.txt)). Point DNS so apex redirects to `www` (or the reverse) for a single preferred URL in Search Console.
+- [`public/og-image.jpg`](public/og-image.jpg) is used for Open Graph / Twitter previews; replace it with your own ~1200×630 image (keep the same filename or update [`src/seo.ts`](src/seo.ts) `OG_IMAGE_PATH`).
+- Google Search Console HTML verification: [`public/googleabfbbaf7823636b0.html`](public/googleabfbbaf7823636b0.html).
+
 ### Clone & run
 
 ```bash

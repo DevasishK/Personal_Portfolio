@@ -40,6 +40,8 @@ export default function MindCloud({
               <img
                 src={imageSrc}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover object-top"
                 onError={() => setImgOk(false)}
               />

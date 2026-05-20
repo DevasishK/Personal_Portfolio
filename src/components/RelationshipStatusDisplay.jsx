@@ -9,21 +9,6 @@ const STATUSES = /** @type {const} */ ({
   Focused: 'Focused',
 })
 
-function getBadgeClasses(status) {
-  switch (status) {
-    case STATUSES.Single:
-      return 'border border-amber-300/70 bg-amber-200 text-amber-950 dark:border-amber-300/20 dark:bg-amber-400/15 dark:text-amber-100'
-    case STATUSES.InRelationship:
-      return 'border border-rose-300/70 bg-rose-200 text-rose-950 dark:border-rose-300/20 dark:bg-rose-400/15 dark:text-rose-100'
-    case STATUSES.Complicated:
-      return 'border border-orange-300/70 bg-orange-200 text-orange-950 dark:border-orange-300/20 dark:bg-orange-400/15 dark:text-orange-100'
-    case STATUSES.Focused:
-      return 'border border-sky-300/70 bg-sky-200 text-sky-950 dark:border-sky-300/20 dark:bg-sky-400/15 dark:text-sky-100'
-    default:
-      return 'border border-black/10 bg-white/40 text-zinc-800 dark:border-white/10 dark:bg-white/10 dark:text-white'
-  }
-}
-
 function getLabel(status) {
   switch (status) {
     case STATUSES.Single:

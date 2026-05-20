@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import Modal from './Modal.jsx'
 import { isEmailConfigured, sendRelationshipRequest } from '../services/email.js'
 
@@ -40,21 +40,21 @@ export default function MusicVibeModal({ open, onClose }) {
 
   const canSubmitSong = song.trim().length > 1 && typingDone && !sending
 
-  const response = useMemo(() => RESPONSES[Math.floor(Math.random() * RESPONSES.length)], [open])
+  const [response, setResponse] = useState(() => RESPONSES[0])
 
   useEffect(() => {
     if (!open) return
+
+    /* eslint-disable react-hooks/set-state-in-effect -- reset chat when modal opens */
+    setResponse(RESPONSES[Math.floor(Math.random() * RESPONSES.length)])
     setMessages([])
     setSong('')
     setTypingDone(false)
     setTyped('')
     setSending(false)
     setError(null)
-  }, [open])
+    /* eslint-enable react-hooks/set-state-in-effect */
 
-  // Optional typing effect for the first message
-  useEffect(() => {
-    if (!open) return
     const full = 'Wait… you got good taste? 👀'
     let i = 0
     const t = window.setInterval(() => {
@@ -87,7 +87,7 @@ export default function MusicVibeModal({ open, onClose }) {
 
     try {
       if (!isEmailConfigured()) {
-        throw new Error('Email is not configured yet.')
+        throw new Error('Email could not be sent from this site right now.')
       }
 
       await sendRelationshipRequest({

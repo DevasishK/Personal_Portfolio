@@ -140,7 +140,7 @@ function MessageWall() {
       <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
           <div className="text-sm font-semibold text-zinc-900 dark:text-white">Message wall</div>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Leave a note. (Backed by Supabase when configured.)</p>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Leave a note for the wall.</p>
         </div>
         <button
           type="button"
@@ -201,16 +201,12 @@ function MessageWall() {
 export default function Fun() {
   const { setMode } = useMode()
   const { liteEffects } = usePerformancePrefs()
-  const [heroAction, setHeroAction] = useState(null)
   const [heroMessage, setHeroMessage] = useState(null)
-  const [vibe, setVibe] = useState(null)
+  const [, setVibe] = useState(null)
   const [activeTag, setActiveTag] = useState(null)
   const [musicOpen, setMusicOpen] = useState(false)
-  const [highlightQuiz, setHighlightQuiz] = useState(false)
   const [showEasterEggHint, setShowEasterEggHint] = useState(false)
   const sideQuestTimersRef = useRef({ show: null, hide: null })
-
-  const [revealFact, setRevealFact] = useState(null)
 
   useEffect(() => {
     setMode(MODES.fun)
@@ -220,16 +216,6 @@ export default function Fun() {
   const relationshipStatus = STATUSES.Single
 
   const data = funData
-
-  const revealFacts = useMemo(
-    () => [
-      'I sometimes finish entire work in one night',
-      'Music helps me think better',
-      'I overthink… but it works',
-      'I debug faster at night',
-    ],
-    [],
-  )
 
   const heroFacts = useMemo(
     () => [
@@ -247,7 +233,6 @@ export default function Fun() {
   }
 
   function setAction(key) {
-    setHeroAction(key)
     setActiveTag(key)
     if (key === 'music') {
       setHeroMessage(null)
@@ -446,14 +431,7 @@ export default function Fun() {
 
                 <div className="mt-10 grid gap-10 md:grid-cols-2">
                   <div className="space-y-8">
-                    <div
-                      className={[
-                        'rounded-3xl transition-all duration-300 ease-out',
-                        highlightQuiz
-                          ? 'ring-2 ring-purple-400/50 ring-offset-2 ring-offset-white/40 dark:ring-purple-300/40 dark:ring-offset-black/20'
-                          : '',
-                      ].join(' ')}
-                    >
+                    <div className="rounded-3xl transition-all duration-300 ease-out">
                       <VibeCheckQuiz />
                     </div>
                     <AnimatePresence initial={false}>

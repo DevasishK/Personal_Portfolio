@@ -99,10 +99,12 @@ export function useMessages() {
   }, [])
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- initial fetch for message wall */
     refresh()
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [refresh])
 
-  return { messages, loading, refresh, configured: isSupabaseConfigured }
+  return { messages, loading, refresh }
 }
 
 export function useVisitorCount({ autoIncrement = true } = {}) {
@@ -126,6 +128,6 @@ export function useVisitorCount({ autoIncrement = true } = {}) {
     }
   }, [autoIncrement])
 
-  return { count, loading, configured: isSupabaseConfigured }
+  return { count, loading }
 }
 
