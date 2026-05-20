@@ -149,7 +149,8 @@ export default function Professional() {
             <Download className="h-4 w-4" /> Download
           </a>
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            Tip: keep your resume at <code className="font-mono">public/resume.pdf</code>.
+            Tip: put the PDF in <code className="font-mono">public/</code> and set <code className="font-mono">resumeUrl</code> to{' '}
+            <code className="font-mono">/yourfile.pdf</code> (site root, not <code className="font-mono">public/...</code>).
           </div>
         </div>
       </Modal>

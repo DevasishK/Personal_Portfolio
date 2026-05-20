@@ -1,5 +1,11 @@
 import { profile } from '../profile.ts'
 
+/** Files in `public/` are served from the site root (`/file.pdf`), never as `/public/...`. */
+function publicAsset(path) {
+  const trimmed = path.startsWith('/') ? path.slice(1) : path
+  return `${import.meta.env.BASE_URL}${trimmed}`
+}
+
 export const professionalData = {
   name: profile.name,
   tagline: 'Building secure, scalable systems with AI and cybersecurity in mind',
@@ -12,8 +18,8 @@ export const professionalData = {
     { label: 'Instagram', href: profile.social.instagram },
     { label: 'Email', href: `mailto:${profile.contact.email}` },
   ],
-  resumeUrl: 'public/preference_1.pdf',
-  resumePreviewUrl: 'public/preference_1.pdf',
+  resumeUrl: publicAsset('/preference_1.pdf'),
+  resumePreviewUrl: publicAsset('/preference_1.pdf'),
   introVideo: {
     thumbnailUrl: '/PHOTO-2026-05-02-02-26-40.jpg',
     // Placeholder YouTube embed URL
