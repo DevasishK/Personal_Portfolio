@@ -28,27 +28,71 @@ function normalizeCount(value) {
   return Number.isFinite(n) ? n : null
 }
 
-export async function incrementVisitCount() {
-  if (!isSupabaseConfigured || !supabase) return null
+const VISIT_FALLBACK_KEY = 'portfolio_visit_count'
 
+function incrementVisitCountFallback() {
+  const next = readJson(VISIT_FALLBACK_KEY, 0) + 1
+  writeJson(VISIT_FALLBACK_KEY, next)
+  return next
+}
+
+function getVisitCountFallback() {
+  return readJson(VISIT_FALLBACK_KEY, 0)
+}
+
+async function incrementVisitCountSupabase() {
   const now = Date.now()
   if (now < visitIncrementDedupeUntil) {
-    return getVisitCount()
+    return getVisitCountSupabase()
   }
 
   const { data, error } = await supabase.rpc('increment_visit_count')
   if (error) throw error
   visitIncrementDedupeUntil = Date.now() + 1200
-  return normalizeCount(data)
+  const count = normalizeCount(data)
+  if (count == null) throw new Error('increment_visit_count returned no count')
+  return count
+}
+
+async function getVisitCountSupabase() {
+  const { data, error } = await supabase.from('visits').select('count').eq('id', 1).maybeSingle()
+  if (error) throw error
+  return normalizeCount(data?.count ?? 0) ?? 0
+}
+
+export async function incrementVisitCount() {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      return await incrementVisitCountSupabase()
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.warn('[visits] Supabase increment failed, using fallback:', err)
+      }
+      try {
+        const current = await getVisitCountSupabase()
+        return current
+      } catch {
+        // use local fallback below
+      }
+    }
+  }
+  return incrementVisitCountFallback()
 }
 
 export async function getVisitCount() {
-  if (!isSupabaseConfigured || !supabase) return null
-
-  const { data, error } = await supabase.from('visits').select('count').single()
-  if (error) throw error
-  return normalizeCount(data?.count)
+  if (isSupabaseConfigured && supabase) {
+    try {
+      return await getVisitCountSupabase()
+    } catch (err) {
+      if (import.meta.env.DEV) {
+        console.warn('[visits] Supabase read failed, using fallback:', err)
+      }
+    }
+  }
+  return getVisitCountFallback()
 }
+
+export { isSupabaseConfigured }
 
 export async function submitQuestion(payload) {
   if (isSupabaseConfigured) {
@@ -128,9 +172,10 @@ export function useVisitorCount({ autoIncrement = true } = {}) {
       setLoading(true)
       try {
         const next = autoIncrement ? await incrementVisitCount() : await getVisitCount()
-        if (!cancelled) setCount(next)
-      } catch {
-        if (!cancelled) setCount(null)
+        if (!cancelled) setCount(next ?? 0)
+      } catch (err) {
+        if (import.meta.env.DEV) console.warn('[visits] hook failed:', err)
+        if (!cancelled) setCount(getVisitCountFallback())
       } finally {
         if (!cancelled) setLoading(false)
       }

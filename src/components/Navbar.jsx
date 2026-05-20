@@ -27,7 +27,7 @@ function NavLink({ to, children }) {
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme()
-  const { count } = useVisitorCount({ autoIncrement: true })
+  const { count, loading: visitsLoading } = useVisitorCount({ autoIncrement: true })
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const menuRef = useRef(null)
@@ -83,7 +83,7 @@ export default function Navbar() {
           <div className="flex items-center justify-end gap-2">
             <div className="hidden sm:block">
               <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950/30 dark:text-zinc-200">
-                {count == null ? '— visits' : `${count.toLocaleString()} visits`}
+                {visitsLoading ? '… visits' : `${(count ?? 0).toLocaleString()} visits`}
               </span>
             </div>
 
@@ -120,7 +120,7 @@ export default function Navbar() {
               <NavLink to="/fun">Fun</NavLink>
               <div className="pt-2">
                 <span className="rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950/30 dark:text-zinc-200">
-                  {count == null ? '— visits' : `${count.toLocaleString()} visits`}
+                  {visitsLoading ? '… visits' : `${(count ?? 0).toLocaleString()} visits`}
                 </span>
               </div>
             </div>

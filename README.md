@@ -46,6 +46,8 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 
 After that you’ll get:
 - **Visitor counter**: increments via RPC `increment_visit_count` and shows in the navbar
+
+**Navbar shows `— visits` or only a small local number?** Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel (or Netlify) → **Environment Variables**, redeploy, and run `supabase/schema.sql` in the Supabase SQL editor. Without those, the site falls back to a per-browser count in `localStorage` (not a global total).
 - **Ask Questions**: `Contact` form inserts into `questions`
 - **Message wall**: reads/writes `messages`
 
