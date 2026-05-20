@@ -12,8 +12,8 @@ export const professionalData = {
     { label: 'Instagram', href: profile.social.instagram },
     { label: 'Email', href: `mailto:${profile.contact.email}` },
   ],
-  resumeUrl: '/preference_1.pdf',
-  resumePreviewUrl: '/preference_1.pdf',
+  resumeUrl: '/resume.pdf',
+  resumePreviewUrl: '/resume.pdf',
   introVideo: {
     thumbnailUrl: '/PHOTO-2026-05-02-02-26-40.jpg',
     // Placeholder YouTube embed URL
