@@ -54,14 +54,16 @@ After that you’ll get:
 Update sample content here:
 - `src/utils/sampleData.js`
 
-If you want a real resume download:
-- Put your file in `public/` (e.g. `public/resume.pdf`)
-- Set `resumeUrl` / `resumePreviewUrl` in `src/utils/sampleData.js` to `/resume.pdf` (site root path, not `public/...`)
+**Resume (local file or Google Drive)**
 
-**Resume preview blank or “Invalid Root reference”?** The PDF file is likely corrupted (broken xref/trailer). Fix it on your Mac:
-1. Open the PDF in **Preview**
-2. **File → Export as PDF** (or Print → Save as PDF)
-3. Replace the file in `public/` and redeploy
+*Option A — Google Drive (good if your local PDF won’t preview):*
+1. Upload the PDF to Google Drive → **Share** → **Anyone with the link** (Viewer).
+2. Copy the share link.
+3. In `src/utils/sampleData.js`, paste it into `RESUME_GOOGLE_DRIVE_SHARE_URL` (replace `YOUR_FILE_ID`).
+
+*Option B — file in the repo:*
+1. Put the PDF in `public/` (e.g. `public/resume.pdf`).
+2. Set `RESUME_GOOGLE_DRIVE_SHARE_URL` to a placeholder with `YOUR_FILE_ID` (keeps local mode) or use `resumeFromLocal('/resume.pdf')` in `sampleData.js`.
 
 ### Deploy (Vercel / Netlify)
 

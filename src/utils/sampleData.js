@@ -1,10 +1,17 @@
 import { profile } from '../profile.ts'
+import { resumeFromGoogleDrive, resumeFromLocal } from './resumeUrls.js'
 
-/** Files in `public/` are served from the site root (`/file.pdf`), never as `/public/...`. */
-function publicAsset(path) {
-  const trimmed = path.startsWith('/') ? path.slice(1) : path
-  return `${import.meta.env.BASE_URL}${trimmed}`
-}
+/**
+ * Resume source — pick one:
+ * - Google Drive: paste Share → “Anyone with the link” link (recommended if local PDF is broken).
+ * - Local file: set to `null` and put PDF in `public/` (e.g. `resume.pdf`).
+ */
+const RESUME_GOOGLE_DRIVE_SHARE_URL =
+  'https://drive.google.com/file/d/1b5AFpzLtd-xwjOYdsp9upt8ODBH6zsX4/view?usp=sharing'
+
+const resume = RESUME_GOOGLE_DRIVE_SHARE_URL.includes('YOUR_FILE_ID')
+  ? resumeFromLocal('/preference_1.pdf')
+  : resumeFromGoogleDrive(RESUME_GOOGLE_DRIVE_SHARE_URL)
 
 export const professionalData = {
   name: profile.name,
@@ -18,8 +25,9 @@ export const professionalData = {
     { label: 'Instagram', href: profile.social.instagram },
     { label: 'Email', href: `mailto:${profile.contact.email}` },
   ],
-  resumeUrl: publicAsset('/preference_1.pdf'),
-  resumePreviewUrl: publicAsset('/preference_1.pdf'),
+  resumeUrl: resume.resumeUrl,
+  resumePreviewUrl: resume.resumePreviewUrl,
+  resumeViewUrl: resume.resumeViewUrl,
   introVideo: {
     thumbnailUrl: '/PHOTO-2026-05-02-02-26-40.jpg',
     // Placeholder YouTube embed URL

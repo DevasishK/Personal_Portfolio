@@ -17,6 +17,7 @@ const EducationLazy = lazy(() => import('../sections/Education.jsx'))
 const FAQLazy = lazy(() => import('../components/FAQ.jsx'))
 const ContactLazy = lazy(() => import('../sections/Contact.jsx'))
 import ProHeroSplit from '../sections/ProHeroSplit.jsx'
+import { isExternalResumeUrl } from '../utils/resumeUrls.js'
 import { professionalData } from '../utils/sampleData.js'
 
 function SectionSkeleton({ className = 'h-64' }) {
@@ -58,7 +59,13 @@ export default function Professional() {
               <a className="btn-ghost w-full sm:w-auto" href="#experience">
                 View Experience
               </a>
-              <a className="btn-primary w-full sm:w-auto" href={data.resumeUrl} download>
+              <a
+                className="btn-primary w-full sm:w-auto"
+                href={data.resumeUrl}
+                {...(isExternalResumeUrl(data.resumeUrl)
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : { download: true })}
+              >
                 <Download className="h-4 w-4" /> Download CV
               </a>
             </div>
@@ -152,7 +159,13 @@ export default function Professional() {
           <ResumePreview src={data.resumePreviewUrl} downloadUrl={data.resumeUrl} className="h-[75vh]" />
         ) : null}
         <div className="mt-4">
-          <a className="btn-primary" href={data.resumeUrl} download>
+          <a
+            className="btn-primary"
+            href={data.resumeUrl}
+            {...(isExternalResumeUrl(data.resumeUrl)
+              ? { target: '_blank', rel: 'noopener noreferrer' }
+              : { download: true })}
+          >
             <Download className="h-4 w-4" /> Download
           </a>
         </div>
